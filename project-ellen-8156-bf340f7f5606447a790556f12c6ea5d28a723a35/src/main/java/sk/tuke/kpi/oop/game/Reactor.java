@@ -1,15 +1,21 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
+import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.actions.PerpetualReactorHeating;
+import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
+import sk.tuke.kpi.oop.game.tools.Hammer;
 
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Reactor extends AbstractActor {
+public class Reactor extends AbstractActor implements Switchable, Repairable {
     private int temperature;
     private int damage;
     private boolean state = false;
-    private Light light;
+    private Set<EnergyConsumer> devices = new HashSet();
 
     private Animation normalAnimation;
     private Animation damageAnimation;
@@ -35,7 +41,7 @@ public class Reactor extends AbstractActor {
     }
 
     public void increaseTemperature(int temperature){
-        if(this.damage == 100 || !isRunning()) return;
+        if(this.damage == 100 || !isOn()) return;
         if(temperature < 0) {
             decreaseTemperature(-temperature);
             return;
@@ -62,14 +68,14 @@ public class Reactor extends AbstractActor {
     }
 
     public void decreaseTemperature(int decrement){
-        if(this.damage == 100 || !isRunning()) return;
+        if(this.damage == 100 || !isOn()) return;
         if(decrement < 0) return;
         if(this.damage >= 50){
             this.temperature -= decrement / 2;
         } else{
             this.temperature -= decrement;
         }
-
+        if(temperature < 0) temperature = 0;
         updateAnimation();
     }
 
@@ -82,10 +88,10 @@ public class Reactor extends AbstractActor {
             setAnimation(damageAnimation);
         } else setAnimation(normalAnimation);
     }
-//    сам
-    public void repairWidth(Hammer hammer){
-        if(hammer != null && this.damage > 0 && this.damage < 100){
-            hammer.use();
+
+    @Override
+    public boolean repair(){
+        if(this.damage > 0 && this.damage < 100){
             if(this.damage <= 50){
                 this.damage = 0;
                 this.temperature = 0;
@@ -95,40 +101,56 @@ public class Reactor extends AbstractActor {
                 if(newTemperature < temperature) temperature = newTemperature;
             }
             updateAnimation();
+            return true;
         }
+        return false;
     }
 
-    public void extinguishWith(FireExtinguisher extinguisher){
-        if(extinguisher != null && damage == 100){
-            extinguisher.use();
+    public boolean extinguish(){
+        if( damage == 100){
             temperature -= 4000;
             if(temperature < 0) temperature = 0;
             setAnimation(extinguisherReactor);
+            return  true;
         }
+        return false;
     }
 
     public void turnOn(){
         state = true;
-        if(light != null) light.setElectricityFlow(true);
+        devices.forEach((device) -> {
+            device.setPowered(true);
+            System.out.println(device);
+            System.out.println("Powered on");
+        });
         updateAnimation();
     }
 
     public  void turnOff(){
         state = false;
-        if(light != null) light.setElectricityFlow(false);
+        devices.forEach((device) -> {device.setPowered(false);});
         setAnimation(reactorOffAnimation);
     }
-    public boolean isRunning(){
+    public boolean isOn(){
         return state;
     }
 
-    public void addLight(Light light){
-        if(light != null) this.light = light;
-        if(state) this.light.setElectricityFlow(true);
+    public void addDevice(EnergyConsumer device){
+        if(devices == null) return;
+        if(state) device.setPowered(true);
+        devices.add(device);
     }
 
-    public void removeLight(){
-        this.light.setElectricityFlow(false);
-        this.light = null;
+    public void removeDevice(EnergyConsumer device){
+        if(devices == null) return;
+        if(state) device.setPowered(false);
+        devices.remove(device);
+    }
+
+    @Override
+    public void addedToScene(@NotNull Scene scene) {
+        super.addedToScene(scene);
+        new PerpetualReactorHeating(1).scheduleFor(this);
+
     }
 }

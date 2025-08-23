@@ -1,10 +1,9 @@
 package sk.tuke.kpi.oop.game;
 // Сам делал
-import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-public class Light extends AbstractActor {
+public class Light extends AbstractActor implements  Switchable, EnergyConsumer{
     private Animation lightOn;
     private Animation lightOff;
     private boolean electricity;
@@ -18,24 +17,40 @@ public class Light extends AbstractActor {
         setAnimation(lightOff);
     }
 
+    private void checkLight() {
+        if(state && electricity){
+            setAnimation(lightOn);
+        }
+        else {
+            setAnimation(lightOff);
+        }
+    }
+
     public void toggle( ){
         state = !state;
-        if(state && electricity){
-            setAnimation(lightOn);
-        }
-        else {
-            setAnimation(lightOff);
-        }
+        checkLight();
     }
 
-    public void setElectricityFlow(boolean electricity){
-        this.electricity = electricity;
-        if(state && electricity){
-            setAnimation(lightOn);
-        }
-        else {
-            setAnimation(lightOff);
-        }
+    @Override
+    public void turnOn() {
+        state = true;
+        checkLight();
     }
 
+    @Override
+    public void turnOff() {
+        state = false;
+        checkLight();
+    }
+
+    @Override
+    public boolean isOn() {
+        return state;
+    }
+
+    @Override
+    public void setPowered(boolean powered) {
+        this.electricity = powered;
+        checkLight();
+    }
 }
