@@ -1,18 +1,16 @@
 package sk.tuke.kpi.oop.game;
 // САм
 import org.jetbrains.annotations.NotNull;
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.gamelib.graphics.Color;
 
 public class PowerSwitch extends AbstractActor {
-    private Animation switchAnimation;
     private Switchable device;
 
     public PowerSwitch(Switchable device){
-        switchAnimation = new Animation("sprites/switch.png", 16, 16, 0.0f, Animation.PlayMode.ONCE);
+        Animation switchAnimation = new Animation("sprites/switch.png", 16, 16, 0.0f, Animation.PlayMode.ONCE);
         setAnimation(switchAnimation);
         this.device = device;
     }

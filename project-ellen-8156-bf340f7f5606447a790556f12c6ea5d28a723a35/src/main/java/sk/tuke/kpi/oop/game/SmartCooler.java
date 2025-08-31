@@ -1,8 +1,5 @@
 package sk.tuke.kpi.oop.game;
 
-import org.jetbrains.annotations.NotNull;
-import sk.tuke.kpi.gamelib.Scene;
-import sk.tuke.kpi.gamelib.graphics.Animation;
 
 public class SmartCooler extends Cooler{
 

@@ -1,6 +1,5 @@
 package sk.tuke.kpi.oop.game.tools;
 
-import sk.tuke.kpi.oop.game.Reactor;
 import sk.tuke.kpi.oop.game.Repairable;
 
 public class Mjolnir  extends Hammer{

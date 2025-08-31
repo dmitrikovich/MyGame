@@ -1,6 +1,5 @@
 package sk.tuke.kpi.oop.game;
 
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
@@ -9,12 +8,11 @@ import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
 public class Helicopter extends AbstractActor {
-    private Animation heliAnimatoion;
     private Player target;
 
     public Helicopter() {
-        heliAnimatoion = new Animation("sprites/heli.png", 64, 64, 0.05f, Animation.PlayMode.LOOP);
-        setAnimation(heliAnimatoion);
+        Animation heliAnimation = new Animation("sprites/heli.png", 64, 64, 0.05f, Animation.PlayMode.LOOP);
+        setAnimation(heliAnimation);
     }
 
     private void executeTask(){
