@@ -1,8 +1,8 @@
-package sk.tuke.kpi.oop.game.tools;
+package sk.tuke.kpi.oop.game.items;
 
 import sk.tuke.kpi.oop.game.Repairable;
 
-public class Mjolnir  extends Hammer{
+public class Mjolnir  extends Hammer {
     public Mjolnir() {
         super(4);
     }

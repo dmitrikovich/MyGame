@@ -2,8 +2,6 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.*;
 import sk.tuke.kpi.gamelib.backends.lwjgl2.Lwjgl2Backend;
-import sk.tuke.kpi.oop.game.actions.Move;
-import sk.tuke.kpi.oop.game.characters.Ripley;
 import sk.tuke.kpi.oop.game.scenarios.FirstSteps;
 
 public class Main {

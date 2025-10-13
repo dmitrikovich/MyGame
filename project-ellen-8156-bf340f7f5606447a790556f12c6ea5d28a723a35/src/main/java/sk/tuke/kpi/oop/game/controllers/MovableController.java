@@ -19,7 +19,6 @@ public class MovableController implements KeyboardListener {
         Map.entry(Input.Key.RIGHT, Direction.EAST)
     );
     private Move<Movable> lastMove;
-    private Input.Key lastKey;
 
     public  MovableController(Movable actor) {
         this.actor = actor;
@@ -27,7 +26,7 @@ public class MovableController implements KeyboardListener {
     }
 
     @Override
-    public void keyPressed(Input.@NotNull Key key) {
+    public void keyPressed(@NotNull  Input.Key key) {
         KeyboardListener.super.keyPressed(key);
 
         if(!map.containsKey(key)) return;
@@ -45,7 +44,7 @@ public class MovableController implements KeyboardListener {
     }
 
     @Override
-    public void keyReleased(Input.@NotNull Key key) {
+    public void keyReleased(@NotNull Input.Key key) {
         KeyboardListener.super.keyReleased(key);
         if(!map.containsKey(key)) return;
         if(lastMove != null) {
