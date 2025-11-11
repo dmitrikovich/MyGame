@@ -62,6 +62,13 @@ public class Move<A extends Movable> implements Action<A> {
         actor.setPosition(newX, newY);
         movingTime = movingTime + deltaTime;
 
+        if(actor.getScene().getMap().intersectsWithWall(actor)){
+            System.out.println("true");
+            actor.setPosition(oldX, oldY);
+        }
+
+
+
         if(movingTime > duration || Math.abs(movingTime - duration) <= 1e-5) {
             stop();
         }

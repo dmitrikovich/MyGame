@@ -23,7 +23,10 @@ public class Energy extends AbstractActor implements Usable<Ripley> {
         if(scene == null) return;
         scene.removeActor(this);
     }
-
+    @Override
+    public Class<Ripley> getUsingActorClass(){
+        return Ripley.class;
+    }
     @Override
     public void addedToScene(@NotNull Scene scene) {
         super.addedToScene(scene);

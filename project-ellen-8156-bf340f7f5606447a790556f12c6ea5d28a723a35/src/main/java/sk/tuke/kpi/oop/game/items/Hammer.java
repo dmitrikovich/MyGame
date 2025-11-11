@@ -1,6 +1,8 @@
 package sk.tuke.kpi.oop.game.items;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.Reactor;
 import sk.tuke.kpi.oop.game.Repairable;
+import sk.tuke.kpi.oop.game.characters.Ripley;
 
 public class Hammer extends BreakableTool<Repairable> implements Collectible {
     private Animation hammerAnimation;
@@ -16,7 +18,10 @@ public class Hammer extends BreakableTool<Repairable> implements Collectible {
         hammerAnimation = new Animation("sprites/hammer.png", 16, 16, 0.2f,  Animation.PlayMode.LOOP_PINGPONG);
         setAnimation(hammerAnimation);
     }
-
+    @Override
+    public Class<Repairable> getUsingActorClass(){
+        return Repairable.class;
+    }
     @Override
     public void useWith(Repairable actor) {
         super.useWith(actor);

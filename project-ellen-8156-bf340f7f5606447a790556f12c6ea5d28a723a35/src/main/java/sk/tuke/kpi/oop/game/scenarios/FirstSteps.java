@@ -19,26 +19,26 @@ public class FirstSteps implements SceneListener {
     public void sceneInitialized(@NotNull Scene scene) {
         SceneListener.super.sceneInitialized(scene);
 
-        Ripley ripley = new Ripley();
-        scene.addActor(ripley, 0 ,0);
+//        Ripley ripley = new Ripley();
+//        scene.addActor(ripley, 0 ,0);
 
-        Energy energy = new Energy();
-        scene.addActor(energy, 100 ,100);
+//        Energy energy = new Energy();
+//        scene.addActor(energy, 100 ,100);
 
-        scene.addActor(wrench, 150 ,150);
-        scene.addActor(hammer, 200 ,200);
-        scene.addActor(fireExtinguisher, 300, 300);
+//        scene.addActor(wrench, 150 ,150);
+//        scene.addActor(hammer, 200 ,200);
+//        scene.addActor(fireExtinguisher, 300, 300);
 
-        Backpack backpack = ripley.getBackpack();
-        backpack.add(hammer);
-        backpack.add(wrench);
-        backpack.add(fireExtinguisher);
+//        Backpack backpack = ripley.getBackpack();
+//        backpack.add(hammer);
+//        backpack.add(wrench);
+//        backpack.add(fireExtinguisher);
 
-        MovableController movableController = new MovableController(ripley);
-        scene.getInput().registerListener(movableController);
-
-        KeeperController keeperController = new KeeperController(ripley);
-        scene.getInput().registerListener(keeperController);
+//        MovableController movableController = new MovableController(ripley);
+//        scene.getInput().registerListener(movableController);
+//
+//        KeeperController keeperController = new KeeperController(ripley);
+//        scene.getInput().registerListener(keeperController);
     }
 
     @Override
