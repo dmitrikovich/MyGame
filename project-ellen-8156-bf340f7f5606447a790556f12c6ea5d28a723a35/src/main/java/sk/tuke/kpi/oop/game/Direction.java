@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
+
 public enum Direction {
     NORTH(0, 1),
     EAST(1,0),
@@ -49,10 +50,19 @@ public enum Direction {
         else if(x == 1 && y == -1) return SOUTHEAST;
         else if(x == -1 && y == 1) return NORTHWEST;
         else if(x == -1 && y == -1) return SOUTHWEST;
-
         return NONE;
     }
-
+    public static Direction fromAngle(float angle){
+        if(angle == 0) return NORTH;
+        else if(angle == 180) return SOUTH;
+        else if(angle == 270) return EAST;
+        else if(angle == 90) return WEST;
+        else if(angle == 315) return NORTHEAST;
+        else if(angle == 225) return SOUTHEAST;
+        else if(angle == 45) return NORTHWEST;
+        else if(angle == 135) return SOUTHWEST;
+        return NONE;
+    }
     public Direction combine(Direction other) {
         int x = this.getDx() + other.getDx();
         int y = this.getDy() + other.getDy();

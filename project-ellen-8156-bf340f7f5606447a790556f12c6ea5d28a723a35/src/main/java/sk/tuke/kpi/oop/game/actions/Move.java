@@ -10,7 +10,6 @@ public class Move<A extends Movable> implements Action<A> {
     private float duration;
     private A actor;
     private boolean isDone;
-
     private float movingTime;
 
 
@@ -59,19 +58,19 @@ public class Move<A extends Movable> implements Action<A> {
         int newX = oldX + actor.getSpeed() * direction.getDx();
         int newY = oldY + actor.getSpeed() * direction.getDy();
 
+
         actor.setPosition(newX, newY);
         movingTime = movingTime + deltaTime;
 
         if(actor.getScene().getMap().intersectsWithWall(actor)){
-            System.out.println("true");
             actor.setPosition(oldX, oldY);
+            actor.collidedWithWall();
         }
-
-
 
         if(movingTime > duration || Math.abs(movingTime - duration) <= 1e-5) {
             stop();
         }
+
     }
 
     @Override

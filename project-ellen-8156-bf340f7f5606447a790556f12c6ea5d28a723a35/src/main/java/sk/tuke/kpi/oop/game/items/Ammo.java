@@ -1,4 +1,3 @@
-
 package sk.tuke.kpi.oop.game.items;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,53 +9,47 @@ import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.oop.game.actions.Use;
 import sk.tuke.kpi.oop.game.characters.Alive;
+import sk.tuke.kpi.oop.game.characters.Armed;
 
 import java.util.List;
 
-public class Energy extends AbstractActor implements Usable<Actor> {
-    public Energy() {
-        Animation animation = new Animation("sprites/energy.png");
-        setAnimation(animation);
+public class Ammo extends AbstractActor implements Usable<Armed> {
+    Animation animationAmmo;
+    public Ammo() {
+        animationAmmo = new Animation("sprites/ammo.png", 16, 16);
+        setAnimation(animationAmmo);
     }
-
     @Override
-    public void useWith(Actor actor) {
-        if(actor instanceof Alive){
-            ((Alive) actor).getHealth().restore();
-
-            Scene scene = this.getScene();
-            if(scene == null) return;
-            scene.removeActor(this);
+    public void useWith(Armed actor) {
+        System.out.println(actor.getFirearm().getAmmo());
+        if(actor != null && getScene() != null &&
+            actor.getFirearm().getAmmo() < actor.getFirearm().getMaxAmmo()){
+            actor.getFirearm().reload(50);
+            System.out.println(actor.getFirearm().getAmmo());
+            this.getScene().removeActor(this);
+        } else {
+            return;
         }
-
-
     }
 
-
-
-    @Override
-    public Class<Actor> getUsingActorClass(){
-        return Actor.class;
-    }
-    @Override
     public void addedToScene(@NotNull Scene scene) {
         super.addedToScene(scene);
 
         new When<>(
             () -> {
-                return findAlive(scene) != null;
+                return findArmed(scene) != null;
             },
             new Invoke<>(() -> {
                 List<Actor> actors = scene.getActors();
                 for(Actor actor : actors){
-                    if(actor instanceof Alive){
+                    if(actor instanceof Armed){
                         new When<>(
                             () -> {
                                 return actor.intersects(this);
                             },
                             new Invoke<>(() -> {
 
-                                new Use<>(this).scheduleFor(actor);
+                                new Use<>(this).scheduleFor((Armed) actor);
                             })
                         ).scheduleFor(this);
                     }
@@ -66,13 +59,18 @@ public class Energy extends AbstractActor implements Usable<Actor> {
         ).scheduleFor(this);
     }
 
-    private Alive findAlive(Scene scene) {
+    private Armed findArmed(Scene scene) {
         List<Actor> actors = scene.getActors();
         for(Actor actor : actors){
-            if(actor instanceof Alive){
-                return (Alive) actor;
+            if(actor instanceof Armed){
+                return (Armed) actor;
             }
         }
         return null;
+    }
+
+    @Override
+    public Class<Armed> getUsingActorClass() {
+        return Armed.class;
     }
 }

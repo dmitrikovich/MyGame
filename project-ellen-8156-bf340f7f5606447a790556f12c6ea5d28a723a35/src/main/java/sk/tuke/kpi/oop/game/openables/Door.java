@@ -15,33 +15,73 @@ import sk.tuke.kpi.oop.game.items.Usable;
 
 public class Door extends AbstractActor implements Openable, Usable{
     private boolean isOpened;
-    Animation openAnimation;
+    Animation openVAnimation;
+    Animation openHAnimation;
+
     Animation closeAnimation;
     public static final Topic<Door> DOOR_OPENED = Topic.create("door opened", Door.class);
     public static final Topic<Door> DOOR_CLOSED = Topic.create("door closed", Door.class);
-    public Door(){
-        openAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.1f);
-        setAnimation(openAnimation);
-        isOpened = false;
-        openAnimation.stop();
+    private Orientation orientation;
+    private String name;
+
+    public enum Orientation{
+        HORIZONTAL,
+        VERTICAL
     }
+
+    public Door(){
+//        openVAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.1f);
+//        setAnimation(openVAnimation);
+//        isOpened = false;
+//        openVAnimation.stop();
+    }
+
+    public Door(String name, Orientation orientation){
+        this.name = name;
+        this.orientation = orientation;
+
+        if(orientation == Orientation.HORIZONTAL){
+            openHAnimation = new Animation("sprites/hdoor.png", 32, 16, 0.1f);
+            setAnimation(openHAnimation);
+            isOpened = false;
+            openHAnimation.stop();
+
+        } else if(orientation == Orientation.VERTICAL){
+            openVAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.1f);
+            setAnimation(openVAnimation);
+            isOpened = false;
+            openVAnimation.stop();
+        }
+    }
+
 
     @Override
     public void open() {
         if(isOpened) return;
-        isOpened = true;
-        openAnimation.setPlayMode(Animation.PlayMode.ONCE);
-        openAnimation.play();
-
 
         int doorX = this.getPosX() / 16;
         int doorY = this.getPosY() / 16;
 
-        MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
-        MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+        if(orientation == Orientation.HORIZONTAL){
+            isOpened = true;
+            openHAnimation.setPlayMode(Animation.PlayMode.ONCE);
+            openHAnimation.play();
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX + 1, doorY);
 
-        mapTile1.setType(MapTile.Type.CLEAR);
-        mapTile2.setType(MapTile.Type.CLEAR);
+            mapTile1.setType(MapTile.Type.CLEAR);
+            mapTile2.setType(MapTile.Type.CLEAR);
+        } else if(orientation == Orientation.VERTICAL){
+            isOpened = true;
+            openVAnimation.setPlayMode(Animation.PlayMode.ONCE);
+            openVAnimation.play();
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+
+            mapTile1.setType(MapTile.Type.CLEAR);
+            mapTile2.setType(MapTile.Type.CLEAR);
+        }
+
         getScene().getMessageBus().publish(DOOR_OPENED, this);
     }
 
@@ -51,18 +91,33 @@ public class Door extends AbstractActor implements Openable, Usable{
     }
     @Override
     public void close() {
-        isOpened = false;
-        openAnimation.setPlayMode(Animation.PlayMode.ONCE_REVERSED);
-        openAnimation.play();
 
         int doorX = this.getPosX() / 16;
         int doorY = this.getPosY() / 16;
 
-        MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
-        MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+//        MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+//        MapTile mapTile2 = getScene().getMap().getTile(doorX + 1, doorY);
 
-        mapTile1.setType(MapTile.Type.WALL);
-        mapTile2.setType(MapTile.Type.WALL);
+        if(orientation == Orientation.HORIZONTAL){
+            isOpened = false;
+            openHAnimation.setPlayMode(Animation.PlayMode.ONCE_REVERSED);
+            openHAnimation.play();
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY);
+            mapTile1.setType(MapTile.Type.WALL);
+            mapTile2.setType(MapTile.Type.WALL);
+        } else if(orientation == Orientation.VERTICAL){
+            isOpened = false;
+            openVAnimation.setPlayMode(Animation.PlayMode.ONCE_REVERSED);
+            openVAnimation.play();
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+            mapTile1.setType(MapTile.Type.WALL);
+            mapTile2.setType(MapTile.Type.WALL);
+        }
+
+
+
         getScene().getMessageBus().publish(DOOR_CLOSED, this);
     }
 
@@ -86,10 +141,23 @@ public class Door extends AbstractActor implements Openable, Usable{
         int doorX = this.getPosX() / 16;
         int doorY = this.getPosY() / 16;
 
-        MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
-        MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+        if (orientation == Orientation.HORIZONTAL) {
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX + 1, doorY);
 
-        mapTile1.setType(MapTile.Type.WALL);
-        mapTile2.setType(MapTile.Type.WALL);
+            mapTile1.setType(MapTile.Type.WALL);
+            mapTile2.setType(MapTile.Type.WALL);
+        }
+        else if (orientation == Orientation.VERTICAL) {
+            MapTile mapTile1 = getScene().getMap().getTile(doorX, doorY);
+            MapTile mapTile2 = getScene().getMap().getTile(doorX, doorY + 1);
+
+            mapTile1.setType(MapTile.Type.WALL);
+            mapTile2.setType(MapTile.Type.WALL);
+        }
+    }
+
+    public @NotNull String getName(){
+        return name;
     }
 }
